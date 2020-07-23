@@ -1,0 +1,23 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+	font-family: inherit;
+}
+
+body {
+	font-family: Comfortaa;
+	margin: 0;
+}
+
+img {
+	max-width: 100%;
+}
+
+html {
+	--light-pink: #f8a0a7;
+	--medium-pink: #f6828c;
+	--pink: #ca054d;
+	--navy: #131c2d;
+	--grey: #eeece7;
+}
