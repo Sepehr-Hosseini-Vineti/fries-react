@@ -46,28 +46,35 @@ const styles = {
 };
 
 const imageOptions = { resize: '300x300' };
-const toQuery = (obj) =>
+const toQuery = obj =>
 	Object.keys(obj)
-		.map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
+		.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
 		.join('&');
 
-const selectors = (state) => ({
+const selectors = state => ({
 	categories: state.category.list,
 	isLoading: state.category.isLoading,
+	selectedCategoryId: state.category.selectedCategoryId,
 });
 
 function CategoriesSlider() {
 	const dispatch = useDispatch();
-	const { categories, isLoading } = useSelector(selectors);
+	const { categories, isLoading, selectedCategoryId } = useSelector(selectors);
 
-	const fetchCategories = useCallback(() => dispatch(actions.fetchCategories()));
+	const fetchCategories = useCallback(() =>
+		dispatch(actions.fetchCategories())
+	);
+	const selectCategory = useCallback(id =>
+		dispatch(actions.selectCategory(id))
+	);
+
 	useEffect(() => {
 		fetchCategories();
 	}, []);
 
-	console.log(`categories: `, categories);
-
-	const onCategoryClick = (category) => {};
+	const onCategoryClick = category => {
+		selectCategory(category.id);
+	};
 
 	return (
 		<Wrapper gutterTop={32}>
@@ -77,11 +84,19 @@ function CategoriesSlider() {
 				<>
 					<div style={styles.heading}>Categories</div>
 					<div style={styles.container}>
-						{categories.map((category) => (
-							<Slide style={styles.slide} onClick={() => onCategoryClick(category)}>
-								<SlideBg image={`${category.images[0]}?${toQuery(imageOptions)}`} />
+						{categories.map(category => (
+							<Slide
+								style={styles.slide}
+								onClick={() => onCategoryClick(category)}
+								active={selectedCategoryId === category.id}
+							>
+								<SlideBg
+									image={`${category.images[0]}?${toQuery(imageOptions)}`}
+								/>
 								<div style={styles.content}>
-									<div style={styles.subtitle}>{category.productsCount} items</div>
+									<div style={styles.subtitle}>
+										{category.productsCount} items
+									</div>
 									<div style={styles.title}>{category.name}</div>
 								</div>
 							</Slide>

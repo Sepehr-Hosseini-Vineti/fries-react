@@ -8,6 +8,7 @@ export default client;
 
 // GET
 
-export const fetchProducts = () => client.get(`/api/products`);
+export const fetchPopularProducts = ({ categoryIds = null }) =>
+	client.get(`/api/products`, { params: { category_ids: categoryIds } });
 
 export const fetchCategories = () => client.get(`/api/categories`);

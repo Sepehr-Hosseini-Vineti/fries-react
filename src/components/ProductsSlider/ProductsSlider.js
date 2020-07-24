@@ -1,7 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { Container, Heading, Slider, Slide, SlideBg, SlideContent, SlideTitle, SlideSubtitle } from './styled';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  Container,
+  Heading,
+  Slider,
+  Slide,
+  SlideBg,
+  SlideContent,
+  SlideTitle,
+  SlideSubtitle,
+} from './styled';
 
 import {
   Grid,
@@ -22,25 +33,28 @@ import Wrapper from '../Wrapper';
 
 import { Modal } from './styled';
 
-import { fetchProducts } from '../../api';
+import slice, * as actions from '../../modules/product';
 
-const ProductsSlider = (props) => {
-  const [products, setProducts] = useState(null);
+const selectors = state => ({
+  products: state.product.popular.list,
+  isLoading: state.product.popular.isLoading,
+});
+
+const ProductsSlider = props => {
+  const dispatch = useDispatch();
+
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const updateProducts = async () => {
-    const {
-      data: { products },
-    } = await fetchProducts();
-    setProducts(products);
-  };
+  const { products, isLoading } = useSelector(selectors);
+
+  const fetchProducts = useCallback(() => dispatch(actions.fetchPopular()));
 
   useEffect(() => {
-    updateProducts();
+    fetchProducts();
   }, []);
 
-  const openModal = (product) => {
+  const openModal = product => {
     setTimeout(() => {
       setSelectedProduct(product);
     }, 700);
@@ -54,16 +68,22 @@ const ProductsSlider = (props) => {
 
   return (
     <Wrapper gutterTop={64}>
-      <ProductModal product={selectedProduct} isModalOpen={isModalOpen} onCloseModal={onCloseModal} />
+      <ProductModal
+        product={selectedProduct}
+        isModalOpen={isModalOpen}
+        onCloseModal={onCloseModal}
+      />
       <Heading>Popular</Heading>
-      {!!products ? (
+      {!isLoading ? (
         <Container>
-          {products.map((product) => (
+          {products.map(product => (
             <Slide onClick={() => openModal(product)}>
               <SlideBg />
               <SlideContent>
                 <SlideTitle>{product.name}</SlideTitle>
-                <SlideSubtitle>{product.ingredients || 'Cheese, Dough, Pepperoni'}</SlideSubtitle>
+                <SlideSubtitle>
+                  {product.ingredients || 'Cheese, Dough, Pepperoni'}
+                </SlideSubtitle>
                 {/* <Rating></Rating> */}
               </SlideContent>
             </Slide>

@@ -1,5 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+import { fetchPopular } from './product';
+
 import * as api from '../api';
+
+export const selectCategory = createAsyncThunk(
+	'category/selectCategory',
+	(action, thunkAPI) => {
+		thunkAPI.dispatch(fetchPopular());
+	}
+);
 
 export const fetchCategories = createAsyncThunk(
 	'category/fetchCategories',
@@ -17,7 +27,7 @@ export default createSlice({
 	initialState: {
 		isLoading: false,
 		list: [],
-		selected: null,
+		selectedCategoryId: null,
 	},
 
 	reducers: {},
@@ -32,6 +42,9 @@ export default createSlice({
 		},
 		[fetchCategories.rejected]: (state, action) => {
 			state.isLoading = false;
+		},
+		[selectCategory.pending]: (state, action) => {
+			state.selectedCategoryId = action.meta.arg;
 		},
 	},
 });
