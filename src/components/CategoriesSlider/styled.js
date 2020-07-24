@@ -17,7 +17,11 @@ export const SlideBg = styled.div`
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: linear-gradient(180deg, var(--navy) 0%, transparent 50%);
+		background: linear-gradient(
+			180deg,
+			var(--overlay-color) 0%,
+			transparent 50%
+		);
 	}
 `;
 
@@ -39,4 +43,16 @@ export const Slide = styled.div`
 	&:hover ${SlideBg} {
 		transform: scale(1.15);
 	}
+
+	--overlay-color: var(--navy);
+	--title-color: var(--medium-pink);
+	--subtitle-color: var(--light-pink);
+
+	${({ active }) =>
+		active &&
+		`
+		--overlay-color: var(--pink);
+		--title-color: #fff;
+		--subtitle-color: #fff;
+	`}
 `;

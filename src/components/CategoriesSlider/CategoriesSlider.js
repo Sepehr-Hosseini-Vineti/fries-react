@@ -34,13 +34,13 @@ const styles = {
 	title: {
 		fontSize: 22,
 		fontWeight: 900,
-		color: '#F6828C',
+		color: 'var(--title-color)',
 		wordBreak: 'break-all',
 	},
 	subtitle: {
 		fontSize: 12,
 		fontWeight: 700,
-		color: '#F8A0A7',
+		color: 'var(--subtitle-color)',
 		marginBottom: 5,
 	},
 };
