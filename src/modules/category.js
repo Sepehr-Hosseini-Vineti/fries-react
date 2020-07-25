@@ -13,7 +13,7 @@ export const selectCategory = createAsyncThunk(
 
 export const fetchCategories = createAsyncThunk(
 	'category/fetchCategories',
-	async thunkApi => {
+	async () => {
 		const {
 			data: { categories },
 		} = await api.fetchCategories();
